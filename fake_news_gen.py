@@ -1,9 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import os
-from typing import Optional
-from openai import OpenAI  # for calling the OpenAI API
-import time
+from openai import OpenAI
 import dotenv
 
 dotenv.load_dotenv(dotenv_path="connection.env")
@@ -12,8 +10,9 @@ OPENROUTER_API_URL = "https://openrouter.ai/api/v1/"
 
 #MODEL = "google/gemma-3-27b-it:free"
 MODEL = "meta-llama/llama-3.3-70b-instruct:free"
-# TODO: main problems: (1) find models that are up on the day of the hackathon, one small and one large.
-#  (2) find a model that is up and supports structured outputs. Also, debug structured output option.
+SMALL_MODEL = "meta-llama/llama-3.2-1b-instruct:free"
+MODEL_STRUCTURED_OUTPUT = "google/gemini-flash-1.5-8b"
+
 
 client = OpenAI(
                 base_url=OPENROUTER_API_URL,
@@ -124,7 +123,6 @@ def summarize_text_structured_output(text_to_summarize: str, model: str = MODEL)
     return response.choices[0].message.content
 
 
-
 def generate_fake_news(text: str, model: str = MODEL):
     prompt = f"""
     Please generate a fake news article based on the following text.
@@ -135,3 +133,12 @@ def generate_fake_news(text: str, model: str = MODEL):
     """
     return ask_model(prompt, model=model)
 
+
+if __name__ == '__main__':
+
+    url = "https://edition.cnn.com/entertainment"
+    #url2 = 'https://www.rollingstone.com/music/music-news/'
+    text = extract_text_from_webpage(url)
+    summarize_text(text, MODEL)
+
+    summarize_text_structured_output(text, MODEL_STRUCTURED_OUTPUT)
