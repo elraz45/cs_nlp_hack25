@@ -135,10 +135,13 @@ def generate_fake_news(text: str, model: str = MODEL):
 
 
 if __name__ == '__main__':
-
     url = "https://edition.cnn.com/entertainment"
     #url2 = 'https://www.rollingstone.com/music/music-news/'
     text = extract_text_from_webpage(url)
-    summarize_text(text, MODEL)
+    print("=== SUMMARY ===")
+    print(summarize_text(text, MODEL))
+    print("\n=== STRUCTURED SUMMARY ===")
+    print(summarize_text_structured_output(text, MODEL_STRUCTURED_OUTPUT))
 
-    summarize_text_structured_output(text, MODEL_STRUCTURED_OUTPUT)
+    print("=== FAKE NEWS ===")
+    print(generate_fake_news(text, MODEL))
